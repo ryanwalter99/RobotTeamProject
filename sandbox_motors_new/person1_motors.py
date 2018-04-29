@@ -29,12 +29,27 @@ def test_forward_backward():
     """
 
 
+
+
 def forward_seconds(seconds, speed, stop_action):
     """
     Makes the robot move forward for the given number of seconds at the given speed,
     where speed is between -100 (full speed backward) and 100 (full speed forward).
     Uses the given stop_action.
     """
+    left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
+    right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
+    seconds = int(input("How many seconds? :"))
+    speed = int(input("How fast between -100 and 100?"))
+
+    left_motor.run_forever(speed_sp=speed)
+    right_motor.run_forever(speed_sp=speed)
+    time.sleep(seconds)
+
+    left_motor.stop(stop_action = "coast")
+    right_motor.stop_action(stop_action = "coast")
+
+
 
 
 def forward_by_time(inches, speed, stop_action):
