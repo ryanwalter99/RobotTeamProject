@@ -1,6 +1,6 @@
 """
 Functions for SPINNING the robot LEFT and RIGHT.
-Authors: David Fisher, David Mutchler and PUT_YOUR_NAME_HERE.
+Authors: David Fisher, David Mutchler and James Brandon.
 """  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 # TODO: 2. Implment spin_left_seconds, then the relevant part of the test function.
@@ -9,10 +9,8 @@ Authors: David Fisher, David Mutchler and PUT_YOUR_NAME_HERE.
 #   Then repeat for spin_left_by_encoders.
 #   Then repeat for the spin_right functions.
 
-
 import ev3dev.ev3 as ev3
 import time
-
 
 def test_spin_left_spin_right():
     """
@@ -28,8 +26,8 @@ def test_spin_left_spin_right():
       3. Same as #2, but runs spin_left_by_encoders.
       4. Same as #1, 2, 3, but tests the spin_right functions.
     """
-    spin_left_seconds(2, 50, "brake")
-
+    #spin_left_seconds(2, 50, "brake")
+    #spin_right_seconds(2, 50, "brake")
 
 def spin_left_seconds(seconds, speed, stop_action):
     """
@@ -44,6 +42,9 @@ def spin_left_seconds(seconds, speed, stop_action):
     # Check that the motors are actually connected
     assert left_motor.connected
     assert right_motor.connected
+
+    seconds = int(input("How many seconds? :"))
+    speed = int(input("How fast between -100 and 100?"))
 
     left_motor.run_forever(speed_sp=-speed*8, stop_action=stop_action)
     right_motor.run_forever(speed_sp=speed*8, stop_action=stop_action)
@@ -76,6 +77,7 @@ def spin_left_by_encoders(degrees, speed, stop_action):
 
 def spin_right_seconds(seconds, speed, stop_action):
     """ Calls spin_left_seconds with negative speeds to achieve spin_right motion. """
+
 
 
 def spin_right_by_time(degrees, speed, stop_action):
