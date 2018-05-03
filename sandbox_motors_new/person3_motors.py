@@ -28,17 +28,9 @@ def test_turn_left_turn_right():
       4. Same as #1, 2, 3, but tests the turn_right functions.
     """
 
-# Connect two large motors on output ports B and C
-    left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
-    right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
-    degrees = int(input('type in degrees'))
-    speed = int(input('speed between -100 to 100'))
-    stoping_action = int(input('type brake, coast, or hold'))
-    seconds = time * 8
 
-    # Check that the motors are actually connected
-    assert left_motor.connected
-    assert right_motor.connected
+    speed = int(input('speed between -100 to 100'))
+    stoping_action = input('type brake, coast, or hold')
 
     while True:
         x = int(input('insert time'))
@@ -69,13 +61,13 @@ def test_turn_left_turn_right():
         y = int(input('insert degrees'))
         if y == 0:
             break
-        turn_right_by_time()
+        turn_right_by_time(y, speed, stoping_action)
 
     while True:
         y = int(input('insert degrees'))
         if y == 0:
             break
-        turn_right_by_encoders()
+        turn_right_by_encoders(y, speed, stoping_action)
 
 
 def turn_left_seconds(seconds, speed, stop_action):
@@ -92,7 +84,10 @@ def turn_left_seconds(seconds, speed, stop_action):
     # Check that the motors are actually connected
     assert left_motor.connected
     assert right_motor.connected
-
+    print(speed, seconds, stop_action)
+    print(type(speed))
+    print(type(seconds))
+    print(type(stop_action))
     right_motor.run_timed(speed_sp=speed * 8, time_sp=seconds * 1000, stop_action=stop_action)
     left_motor.run_timed(speed_sp=-speed * 8, time_sp=seconds * 1000, stop_action=stop_action)
     right_motor.wait_while('running')
