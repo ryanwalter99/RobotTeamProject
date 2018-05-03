@@ -28,15 +28,16 @@ def test_forward_backward():
       4. Same as #1, 2, 3, but tests the BACKWARD functions.
     """
     while True:
-       ## seconds = int(input('seconds for robot to run:'))
-       ## if seconds == 0:
-          #  break
+        seconds = int(input('seconds for robot to run:'))
+        if seconds == 0:
+            break
         speed = int(input('speed between -100 and 100:'))
-       ## backward_seconds(seconds,speed,stop_action='coast')
-       ## forward_seconds(seconds,speed,stop_action='coast')
+        backward_seconds(seconds,speed,stop_action='coast')
+        forward_seconds(seconds,speed,stop_action='coast')
         inches = int(input('inches for robot to run:'))
         forward_by_time(inches,speed,stop_action='coast')
-       ## backward_by_time(inches,speed,stop_action='coast')
+        backward_by_time(inches,speed,stop_action='coast')
+        forward_by_encoders(inches,speed,stop_action='coast')
 
 
 
@@ -81,7 +82,7 @@ def forward_by_time(inches, speed, stop_action):
 
     left_motor.run_forever(speed_sp=speed * 8, stop_action=stop_action)
     right_motor.run_forever(speed_sp=speed * 8, stop_action=stop_action)
-    ## For speed of 400
+
     new_speed = (4.6/400)*(speed*8)
     time.sleep(inches/new_speed)
 
@@ -97,6 +98,23 @@ def forward_by_encoders(inches, speed, stop_action):
       2. Move until the computed number of degrees is reached.
     """
 
+    new_speed = (4.6 / 400) * (speed * 8)
+    ## 16.67 is degrees the wheels move in one inch
+    degrees  = (speed*8)*inches/new_speed
+    left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
+    right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
+
+    assert left_motor.connected
+    assert right_motor.connected
+
+    left_motor.run_to_rel_pos(position_sp=degrees ,speed_sp=speed*8, stop_action=stop_action)
+    right_motor.run_to_rel_pos(position_sp=degrees,speed_sp=speed*8, stop_action=stop_action)
+
+    time.sleep(inches / new_speed)
+    time.sleep(inches/new_speed)
+    left_motor.stop()
+    right_motor.stop()
+
 
 def backward_seconds(seconds, speed, stop_action):
     """ Calls forward_seconds with negative speeds to achieve backward motion. """
@@ -107,10 +125,10 @@ def backward_seconds(seconds, speed, stop_action):
 
 def backward_by_time(inches, speed, stop_action):
     """ Calls forward_by_time with negative speeds to achieve backward motion. """
-    forward_by_time(inches,-speed,stop_action)
+    forward_by_time(inches,-speed,stop_action=stop_action)
 
 def backward_by_encoders(inches, speed, stop_action):
     """ Calls forward_by_encoders with negative speeds to achieve backward motion. """
-
+    forward_by_encoders(inches,-speed,stop_action=stop_action)
 
 test_forward_backward()
