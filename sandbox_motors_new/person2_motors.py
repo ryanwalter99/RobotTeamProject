@@ -28,7 +28,7 @@ def test_spin_left_spin_right():
     """
     #spin_left_seconds(2, 50, "brake")
     #spin_right_seconds(2, 50, "brake")
-
+    spin_left_by_time(6,4,"brake")
 def spin_left_seconds(seconds, speed, stop_action):
     """
     Makes the robot spin in place left for the given number of seconds at the given speed,
@@ -63,7 +63,20 @@ def spin_left_by_time(degrees, speed, stop_action):
       2. Sleep for the computed number of seconds.
       3. Stop moving.
     """
+    left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
+    right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
 
+    assert left_motor.connected
+    assert right_motor.connected
+
+    degrees = int(input("How many degrees? :"))
+    speed = int(input("How fast between -100 and 100?"))
+
+    left_motor.run_forever(speed_sp=-speed * 8, stop_action=stop_action)
+    right_motor.run_forever(speed_sp=speed * 8, stop_action=stop_action)
+    time.sleep(degrees/((120/552)*(speed*8)))
+    left_motor.stop()
+    right_motor.stop()
 
 def spin_left_by_encoders(degrees, speed, stop_action):
     """
@@ -73,6 +86,16 @@ def spin_left_by_encoders(degrees, speed, stop_action):
       1. Compute the number of degrees the wheels should spin to achieve the desired distance.
       2. Move until the computed number of degrees is reached.
     """
+    left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
+    right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
+
+    assert left_motor.connected
+    assert right_motor.connected
+
+    degrees = int(input("How many wheel degrees? :"))
+    speed = int(input("How fast between -100 and 100?"))
+
+    left_motor.run_to_rel_pos(position_sp=degrees)
 
 
 def spin_right_seconds(seconds, speed, stop_action):
