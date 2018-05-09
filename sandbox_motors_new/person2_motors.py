@@ -94,10 +94,15 @@ def spin_left_by_encoders(degrees, speed, stop_action):
 
     degrees = int(input("How many wheel degrees? :"))
     speed = int(input("How fast between -100 and 100?"))
+    degrees1 = degrees / (120 / 552)
+    left_motor.run_to_rel_pos(position_sp=degrees1, speed_sp=-1 * (speed * 8), stop_action=stop_action)
+    right_motor.run_to_rel_pos(position_sp=degrees1, speed_sp=speed * 8, stop_action=stop_action)
 
-    left_motor.run_to_rel_pos(position_sp=degrees)
-
-
+    time.sleep(degrees / (120 * speed * 8 / 552))
+    time.sleep(degrees / (120 * speed * 8 / 552))
+    left_motor.stop()
+    right_motor.stop()
+    
 def spin_right_seconds(seconds, speed, stop_action):
     """ Calls spin_left_seconds with negative speeds to achieve spin_right motion. """
 
