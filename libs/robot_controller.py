@@ -20,4 +20,33 @@ class Snatch3r(object):
     """Commands for the Snatch3r robot that might be useful in many different programs."""
     
     # TODO: Implement the Snatch3r class as needed when working the sandox exercises
-    # (and delete these comments)
+    def __init__(self):
+        self.left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
+        self.right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
+
+        assert self.left_motor.connected
+        assert self.right_motor.connected
+
+    def drive_inches(self,inches,speed,stop_action='coast'):
+
+        new_speed = (4.6 / 400) * (speed)
+        ## 16.67 is degrees the wheels move in one inch
+        degrees = (speed) * (inches / new_speed)
+
+
+        self.left_motor.run_to_rel_pos(position_sp=degrees, speed_sp=speed , stop_action=stop_action)
+        self.right_motor.run_to_rel_pos(position_sp=degrees, speed_sp=speed , stop_action=stop_action)
+
+        time.sleep(inches / new_speed)
+
+        self.left_motor.stop()
+        self.right_motor.stop()
+
+    def drive_inches_backward(self,inches,speed,stop_action='coast'):
+        self.drive_inches(-1*inches,-1*speed,stop_action=stop_action)
+
+
+
+
+
+

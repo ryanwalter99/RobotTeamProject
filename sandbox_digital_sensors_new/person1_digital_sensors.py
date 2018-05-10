@@ -7,11 +7,11 @@ Person 1: ev3.TouchSensor
 Person 2: ev3.Button
 Person 3: ev3.RemoteControl
 
-Authors: David Fisher, David Mutchler and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+Authors: David Fisher, David Mutchler and Ryan Walter.
+"""  # : 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 # -----------------------------------------------------------------------------
-# TODO: 2.  WITH YOUR INSTRUCTOR, discuss the "big picture" of this project,
+# done: 2.  WITH YOUR INSTRUCTOR, discuss the "big picture" of this project,
 #           as described in the   _README_FIRST.txt   file.
 #
 # When your   ** ENTIRE TEAM ** understands that:
@@ -34,9 +34,10 @@ def main():
     """ Calls the   TEST   functions in this module. """
     # Uncomment these tests as you proceed through this module.
 
-    # run_test_touch_sensor()
-    # run_test_wait_for_press()
-    # run_test_show_images()
+   # run_test_touch_sensor()
+   # run_test_wait_for_press()
+   # run_test_show_images()
+
 
 
 def run_test_touch_sensor():
@@ -106,10 +107,13 @@ def print_state_of_touch_sensor(n, seconds_per_print):
        2. SLEEPs for the given number of seconds.
     """
     # -------------------------------------------------------------------------
-    # TODO: 3.  Implement and test this function.
+    # : 3.  Implement and test this function.
     #           Tests have been written for you (above).
     # -------------------------------------------------------------------------
-
+    touch_sensor = ev3.TouchSensor()
+    for k in range(n):
+        print(touch_sensor.is_pressed)
+        time.sleep(seconds_per_print)
 
 def run_test_wait_for_press():
     """ Tests the   wait_for_press   function. """
@@ -151,10 +155,15 @@ def wait_for_press():
        2. Sleeps for a small amount (say, 0.05 seconds).
     """
     # -------------------------------------------------------------------------
-    # TODO: 4.  Implement and test this function.
+    # : 4.  Implement and test this function.
     #           Tests have been written for you (above).
     # -------------------------------------------------------------------------
+    touch_sensor = ev3.TouchSensor()
+    while True:
+        if touch_sensor.is_pressed:
+            break
 
+    time.sleep(.05)
 
 def run_test_show_images():
     """ Tests the   show_images   function. """
@@ -220,7 +229,19 @@ def show_images(list_of_images):
     Type hints:
       :type list_of_images: []
     """
+    lcd_screen = ev3.Screen()
+    print("Press the touch sensor for the next image.")
+    touch_sensor = ev3.TouchSensor()
 
+
+    for k in range(len(list_of_images)):
+        while True:
+            if touch_sensor.is_pressed:
+                break
+            time.sleep(.05)
+        image = Image.open(list_of_images[k])
+        lcd_screen.image.paste(image,(0,0))
+        lcd_screen.update()
 
 # -----------------------------------------------------------------------------
 # Calls  main  to start the ball rolling.

@@ -32,12 +32,14 @@ def test_forward_backward():
         if seconds == 0:
             break
         speed = int(input('speed between -100 and 100:'))
-        backward_seconds(seconds,speed,stop_action='coast')
-        forward_seconds(seconds,speed,stop_action='coast')
         inches = int(input('inches for robot to run:'))
+
+        forward_seconds(seconds, speed, stop_action='coast')
+        backward_seconds(seconds, speed, stop_action='coast')
         forward_by_time(inches,speed,stop_action='coast')
         backward_by_time(inches,speed,stop_action='coast')
         forward_by_encoders(inches,speed,stop_action='coast')
+        backward_by_encoders(inches,speed,stop_action='coast')
 
 
 
@@ -129,6 +131,6 @@ def backward_by_time(inches, speed, stop_action):
 
 def backward_by_encoders(inches, speed, stop_action):
     """ Calls forward_by_encoders with negative speeds to achieve backward motion. """
-    forward_by_encoders(inches,-speed,stop_action=stop_action)
+    forward_by_encoders(inches,-1*speed,stop_action=stop_action)
 
 test_forward_backward()
