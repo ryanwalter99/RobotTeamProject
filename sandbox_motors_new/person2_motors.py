@@ -29,7 +29,9 @@ def test_spin_left_spin_right():
     #spin_left_seconds(2, 50, "brake")
     #spin_right_seconds(2, 50, "brake")
     #spin_left_by_time(6,4,"brake")
-    spin_left_by_encoders(6, 40, 'brake')
+    degrees = int(input("How many wheel degrees? :"))
+    speed = int(input("How fast between -100 and 100?"))
+    spin_left_by_encoders(degrees, speed, 'brake')
 def spin_left_seconds(seconds, speed, stop_action):
     """
     Makes the robot spin in place left for the given number of seconds at the given speed,
@@ -93,14 +95,12 @@ def spin_left_by_encoders(degrees, speed, stop_action):
     assert left_motor.connected
     assert right_motor.connected
 
-    degrees = int(input("How many wheel degrees? :"))
-    speed = int(input("How fast between -100 and 100?"))
-    degrees1 = degrees / (120 / 552)
+    degrees1 = (speed * 8 * degrees / ((120 / 552) * (speed * 8)))
     left_motor.run_to_rel_pos(position_sp=degrees1, speed_sp=-speed * 8, stop_action=stop_action)
     right_motor.run_to_rel_pos(position_sp=degrees1, speed_sp=speed * 8, stop_action=stop_action)
 
-    time.sleep(degrees / (120 * speed * 8 / 552))
-    time.sleep(degrees / (120 * speed * 8 / 552))
+    time.sleep(degrees / ((120 / 552) * (speed * 8)))
+    time.sleep(degrees / ((120 / 552) * (speed * 8)))
     left_motor.stop()
     right_motor.stop()
 
