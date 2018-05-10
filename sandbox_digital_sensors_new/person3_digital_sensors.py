@@ -7,11 +7,11 @@ Person 1: ev3.TouchSensor
 Person 2: ev3.Button
 Person 3: ev3.RemoteControl
 
-Authors: David Fisher, David Mutchler and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+Authors: David Fisher, David Mutchler and Alex Gipson.
+"""  # DO: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 # -----------------------------------------------------------------------------
-# TODO: 2.  WITH YOUR INSTRUCTOR, discuss the "big picture" of this project,
+# DO: 2.  WITH YOUR INSTRUCTOR, discuss the "big picture" of this project,
 #           as described in the   _README_FIRST.txt   file.
 #
 # When your   ** ENTIRE TEAM ** understands that:
@@ -35,7 +35,7 @@ def main():
 
     # run_test_buttons_on_ir_beacon()
     # run_test_wait_for_press_on_ir_beacon_button()
-    # run_test_make_sounds()
+    run_test_make_sounds()
 
 
 def run_test_buttons_on_ir_beacon():
@@ -117,10 +117,14 @@ def print_state_of_blue_up_button_on_ir_beacon(n, seconds_per_print):
        2. SLEEPs for the given number of seconds.
     """
     # -------------------------------------------------------------------------
-    # TODO: 3.  Implement and test this function.
+    # DO: 3.  Implement and test this function.
     #           Tests have been written for you (above).
     # -------------------------------------------------------------------------
 
+    Blue_up = ev3.RemoteControl(channel=1)
+    for k in range(n):
+        print(Blue_up.blue_up)
+        time.sleep(seconds_per_print)
 
 def run_test_wait_for_press_on_ir_beacon_button():
     """ Tests the   wait_for_RED_DOWN_button_press   function. """
@@ -183,10 +187,13 @@ def wait_for_RED_DOWN_button_press():
        2. Sleeps for a small amount (say, 0.05 seconds).
     """
     # -------------------------------------------------------------------------
-    # TODO: 4.  Implement and test this function.
+    # DO: 4.  Implement and test this function.
     #           Tests have been written for you (above).
     # -------------------------------------------------------------------------
-
+    codered = ev3.RemoteControl(channel=2)
+    while codered.red_down is True:
+        break
+    time.sleep(.05)
 
 def run_test_make_sounds():
     """ Tests the   make_sounds   function. """
@@ -213,9 +220,19 @@ def make_sounds():
               "/home/robot/csse120/assets/sounds/awesome_pcm.wav"
        -- BLUE_DOWN button:  The program breaks out of the loop.
     """
+    remote = ev3.RemoteControl(channel=2)
+    while True:
+        if remote.red_up:
+            ev3.Sound.beep()
+        if remote.red_down:
+            ev3.Sound.speak('hello')
+        if remote.blue_up:
+            ev3.Sound.play('/home/robot/csse120/assets/sounds/awesome_pcm.wav')
+        if remote.blue_down:
+            break
 
 
-# -----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # Calls  main  to start the ball rolling.
-# -----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 main()
