@@ -33,9 +33,9 @@ def main():
     """ Calls the   TEST   functions in this module. """
     # Uncomment these tests as you proceed through this module.
 
-    # run_test_buttons_on_brick()
-    # run_test_wait_for_press_on_brick_button()
-    # run_test_show_leds()
+    run_test_buttons_on_brick()
+    #run_test_wait_for_press_on_brick_button()
+    #run_test_show_leds()
 
 
 def run_test_buttons_on_brick():
@@ -116,10 +116,13 @@ def print_state_of_left_button_on_brick(n, seconds_per_print):
        2. SLEEPs for the given number of seconds.
     """
     # -------------------------------------------------------------------------
-    # TODO: 3.  Implement and test this function.
+    # Done: 3.  Implement and test this function.
     #           Tests have been written for you (above).
     # -------------------------------------------------------------------------
-
+    button = ev3.Button()
+    for k in range(n):
+        print(button.left)
+        time.sleep(seconds_per_print)
 
 def run_test_wait_for_press_on_brick_button():
     """ Tests the   wait_for_UP_button_press   function. """
@@ -179,6 +182,7 @@ def wait_for_up_button_press():
     # TODO: 4.  Implement and test this function.
     #           Tests have been written for you (above).
     # -------------------------------------------------------------------------
+    Button = ev3.Button()
 
 
 def run_test_show_leds():
