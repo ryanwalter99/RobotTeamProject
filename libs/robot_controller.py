@@ -45,7 +45,21 @@ class Snatch3r(object):
     def drive_inches_backward(self,inches,speed,stop_action='coast'):
         self.drive_inches(-1*inches,-1*speed,stop_action=stop_action)
 
-
+    def turn_degrees(self, degrees_to_turn, turn_speed_sp):
+        """
+        turn_degrees is made to take input on degrees to turn. It moves the motors in opposite directions depending on
+        if the input is positive or negative. The function will beep when it has finished.
+        """
+        degrees_per_turning_degree = 4
+        degrees_per_wheel = degrees_to_turn * degrees_per_turning_degree
+        if turn_speed_sp < 0:
+            self.left_motor.run_to_rel_pos(position_sp=degrees_per_wheel, speed_sp=turn_speed_sp)
+            self.right_motor.run_to_rel_pos(position_sp=-degrees_per_wheel, speed_sp=turn_speed_sp)
+        if turn_speed_sp > 0:
+            self.left_motor.run_to_rel_pos(position_sp=-degrees_per_wheel, speed_sp=turn_speed_sp)
+            self.right_motor.run_to_rel_pos(position_sp=degrees_per_wheel, speed_sp=turn_speed_sp)
+        self.left_motor.wait_while(ev3.Motor.STATE_RUNNING)
+        self.right_motor.wait_while(ev3.Motor.STATE_RUNNING)
 
 
 
