@@ -23,10 +23,14 @@ class Snatch3r(object):
     def __init__(self):
         self.left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
         self.right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
+        self.arm_motor = ev3.MediumMotor(ev3.OUTPUT_A)
+        self.touch_sensor = ev3.TouchSensor(ev3.INPUT_1)
+        self.max_speed = 900
 
 
         assert self.left_motor.connected
         assert self.right_motor.connected
+        assert self.arm_motor.connected
 
     def drive_inches(self,inches,speed,stop_action='coast'):
 
@@ -68,5 +72,37 @@ class Snatch3r(object):
             time.sleep(0.1)
 
 
+    def stop(self):
+        self.right_motor.stop(stop_action='brake')
+        self.left_motor.stop(stop_action='brake')
 
+    def drive(self, left_speed_entry, right_speed_entry):
+        self.left_motor.run_forever(speed_sp=left_speed_entry)
+        self.right_motor.run_forever(speed_sp=right_speed_entry)
+
+    def backward(self, left_speed_entry, right_speed_entry):
+        self.left_motor.run_forever(speed_sp=-left_speed_entry)
+        self.right_motor.run_forever(speed_sp=-right_speed_entry)
+
+    def arm_up(self):
+        """
+        arm_up is made to raise the arm up when the desired button is pressed. This function will always raise the
+        arm as fast as possible and will beep when it is fully raised.
+        """
+        self.arm_motor.run_forever(speed_sp=self.max_speed)
+        while not self.touch_sensor.is_pressed:
+            time.sleep(0.01)
+        self.arm_motor.stop(stop_action="brake")
+        self.arm_motor.stop()
+        ev3.Sound.beep().wait()
+
+    def arm_down(self):
+        """
+        arm_down is made to lower the arm down when the desired button is pressed. This function will always lower the
+        arm as fast as possible and will beep when it is fully lowered.
+        """
+        self.arm_motor.run_forever(speed_sp=self.max_speed,stop_action='brake')
+        time.sleep(5)
+        self.arm_motor.stop()
+        ev3.Sound.beep().wait()
 
