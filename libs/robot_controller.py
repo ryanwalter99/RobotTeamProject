@@ -65,13 +65,6 @@ class Snatch3r(object):
     def loop_forever(self):
         self.running = True
         while self.running:
-            if self.ir_sensor.proximity < 20:
-                ev3.Sound.beep()
-                self.stop()
-                ev3.Sound.speak('You went in the hole. You win.')
-            elif self.color_sensor.color == ev3.ColorSensor.COLOR_BLUE:
-                self.stop()
-                ev3.Sound.speak('You went in the water. You lose.')
             time.sleep(0.1)
 
 
