@@ -94,15 +94,16 @@ def spin_left_by_encoders(degrees, speed, stop_action):
 
     assert left_motor.connected
     assert right_motor.connected
+    #
+    # degrees1 = (speed * 8 * degrees / ((120 / 552) * (speed * 8)))
+    # left_motor.run_to_rel_pos(position_sp=degrees1, speed_sp=-speed * 8, stop_action=stop_action)
+    # right_motor.run_to_rel_pos(position_sp=degrees1, speed_sp=speed * 8, stop_action=stop_action)
+    #
+    # time.sleep(degrees / ((120 / 552) * (speed * 8)))
+    # time.sleep(degrees / ((120 / 552) * (speed * 8)))
+    # left_motor.stop()
+    # right_motor.stop()
 
-    degrees1 = (speed * 8 * degrees / ((120 / 552) * (speed * 8)))
-    left_motor.run_to_rel_pos(position_sp=degrees1, speed_sp=-speed * 8, stop_action=stop_action)
-    right_motor.run_to_rel_pos(position_sp=degrees1, speed_sp=speed * 8, stop_action=stop_action)
-
-    time.sleep(degrees / ((120 / 552) * (speed * 8)))
-    time.sleep(degrees / ((120 / 552) * (speed * 8)))
-    left_motor.stop()
-    right_motor.stop()
 
 def spin_right_seconds(seconds, speed, stop_action):
     """ Calls spin_left_seconds with negative speeds to achieve spin_right motion. """
