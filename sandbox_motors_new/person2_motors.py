@@ -96,16 +96,16 @@ def spin_left_by_encoders(degrees_to_turn, turn_speed, stop_action):
     degrees_per_wheel = degrees_to_turn * degrees_per_turning_degree
 
     if turn_speed < 0:
-        ev3.left_motor.run_to_rel_pos(position_sp=degrees_per_wheel, speed_sp=turn_speed)
-        ev3.right_motor.run_to_rel_pos(position_sp=-degrees_per_wheel, speed_sp=turn_speed)
+        left_motor.run_to_rel_pos(position_sp=degrees_per_wheel, speed_sp=turn_speed)
+        right_motor.run_to_rel_pos(position_sp=-degrees_per_wheel, speed_sp=turn_speed)
 
     if turn_speed > 0:
-        ev3.left_motor.run_to_rel_pos(position_sp=-degrees_per_wheel, speed_sp=turn_speed)
-        ev3.right_motor.run_to_rel_pos(position_sp=degrees_per_wheel, speed_sp=turn_speed)
+        left_motor.run_to_rel_pos(position_sp=-degrees_per_wheel, speed_sp=turn_speed)
+        right_motor.run_to_rel_pos(position_sp=degrees_per_wheel, speed_sp=turn_speed)
 
-    ev3.left_motor.wait_while(ev3.Motor.STATE_RUNNING)
-    ev3.right_motor.wait_while(ev3.Motor.STATE_RUNNING)
-
+    left_motor.wait_while(ev3.Motor.STATE_RUNNING)
+    right_motor.wait_while(ev3.Motor.STATE_RUNNING)
+    
     # degrees1 = (speed * 8 * degrees / ((120 / 552) * (speed * 8)))
     # left_motor.run_to_rel_pos(position_sp=degrees1, speed_sp=-speed * 8, stop_action=stop_action)
     # right_motor.run_to_rel_pos(position_sp=degrees1, speed_sp=speed * 8, stop_action=stop_action)
