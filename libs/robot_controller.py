@@ -24,7 +24,7 @@ class Snatch3r(object):
         self.left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
         self.right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
         self.arm_motor = ev3.MediumMotor(ev3.OUTPUT_A)
-        self.touch_sensor = ev3.TouchSensor(ev3.INPUT_1)
+        self.touch_sensor = ev3.TouchSensor()
         self.max_speed = 900
 
 
@@ -101,8 +101,21 @@ class Snatch3r(object):
         arm_down is made to lower the arm down when the desired button is pressed. This function will always lower the
         arm as fast as possible and will beep when it is fully lowered.
         """
-        self.arm_motor.run_forever(speed_sp=self.max_speed,stop_action='brake')
-        time.sleep(5)
-        self.arm_motor.stop()
+        print('Hi')
+
+        self.arm_motor.run_to_rel_pos(position_sp=-1*14.2*360, speed_sp=self.max_speed)
+        self.arm_motor.wait_while(ev3.Motor.STATE_RUNNING)
         ev3.Sound.beep().wait()
+
+
+    def shutdown(self):
+        """
+        shutdown is made to stop all movement of the robot and finish running code when the desired button is pressed.
+        This function changes the LEDs to Green and says 'Goodbye' before after everything is stopped.
+        """
+        self.arm_motor.stop()
+        self.left_motor.stop()
+        self.right_motor.stop()
+        print('Goodbye!')
+        ev3.Sound.speak("Goodbye").wait()
 
