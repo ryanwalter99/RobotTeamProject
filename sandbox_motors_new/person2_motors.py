@@ -26,12 +26,19 @@ def test_spin_left_spin_right():
       3. Same as #2, but runs spin_left_by_encoders.
       4. Same as #1, 2, 3, but tests the spin_right functions.
     """
-    #spin_left_seconds(2, 50, "brake")
-    #spin_right_seconds(2, 50, "brake")
-    #spin_left_by_time(6,4,"brake")
+    #spin_left_seconds(seconds, speed, "brake")
+    #spin_right_seconds(seconds, speed, "brake")
+    #spin_left_by_time(degrees,speed,"brake")
     degrees = int(input("How many wheel degrees? :"))
     speed = int(input("How fast between -100 and 100?"))
+    seconds = int(input("How many seconds? :"))
+
     spin_left_by_encoders(degrees, speed, 'brake')
+    spin_right_seconds(seconds, speed, 'brake')
+    spin_right_by_time(degrees, speed, 'brake')
+    spin_right_by_encoders(degrees, speed, 'brake')
+    spin_left_seconds(seconds, speed, 'brake')
+
 def spin_left_seconds(seconds, speed, stop_action):
     """
     Makes the robot spin in place left for the given number of seconds at the given speed,
@@ -45,9 +52,6 @@ def spin_left_seconds(seconds, speed, stop_action):
     # Check that the motors are actually connected
     assert left_motor.connected
     assert right_motor.connected
-
-    seconds = int(input("How many seconds? :"))
-    speed = int(input("How fast between -100 and 100?"))
 
     left_motor.run_forever(speed_sp=-speed*8, stop_action=stop_action)
     right_motor.run_forever(speed_sp=speed*8, stop_action=stop_action)
@@ -72,16 +76,13 @@ def spin_left_by_time(degrees, speed, stop_action):
     assert left_motor.connected
     assert right_motor.connected
 
-    degrees = int(input("How many degrees? :"))
-    speed = int(input("How fast between -100 and 100?"))
-
     left_motor.run_forever(speed_sp=-speed * 8, stop_action=stop_action)
     right_motor.run_forever(speed_sp=speed * 8, stop_action=stop_action)
-    time.sleep(degrees/((120/552)*(speed*8)))
+    time.sleep(degrees/((120/552)*(abs(speed*8))))
     left_motor.stop()
     right_motor.stop()
 
-def spin_left_by_encoders(degrees, speed, stop_action):
+def spin_left_by_encoders(degrees_to_turn, turn_speed, stop_action):
     """
     Makes the robot spin in place left the given number of degrees at the given speed,
     where speed is between -100 (full speed spin_right) and 100 (full speed spin_left).
@@ -94,7 +95,21 @@ def spin_left_by_encoders(degrees, speed, stop_action):
 
     assert left_motor.connected
     assert right_motor.connected
-    #
+
+    degrees_per_turning_degree = 4.5
+    degrees_per_wheel = round(degrees_to_turn * degrees_per_turning_degree)
+
+    if turn_speed < 0:
+        left_motor.run_to_rel_pos(position_sp=degrees_per_wheel, speed_sp=turn_speed * 8)
+        right_motor.run_to_rel_pos(position_sp=-degrees_per_wheel, speed_sp=turn_speed * 8)
+
+    if turn_speed > 0:
+        left_motor.run_to_rel_pos(position_sp=-degrees_per_wheel, speed_sp=turn_speed * 8)
+        right_motor.run_to_rel_pos(position_sp=degrees_per_wheel, speed_sp=turn_speed * 8)
+
+    left_motor.wait_while(ev3.Motor.STATE_RUNNING)
+    right_motor.wait_while(ev3.Motor.STATE_RUNNING)
+
     # degrees1 = (speed * 8 * degrees / ((120 / 552) * (speed * 8)))
     # left_motor.run_to_rel_pos(position_sp=degrees1, speed_sp=-speed * 8, stop_action=stop_action)
     # right_motor.run_to_rel_pos(position_sp=degrees1, speed_sp=speed * 8, stop_action=stop_action)
@@ -107,15 +122,15 @@ def spin_left_by_encoders(degrees, speed, stop_action):
 
 def spin_right_seconds(seconds, speed, stop_action):
     """ Calls spin_left_seconds with negative speeds to achieve spin_right motion. """
-
+    spin_left_seconds(seconds, -speed, stop_action)
 
 
 def spin_right_by_time(degrees, speed, stop_action):
     """ Calls spin_left_by_time with negative speeds to achieve spin_right motion. """
-
+    spin_left_by_time(degrees, -speed, stop_action)
 
 def spin_right_by_encoders(degrees, speed, stop_action):
     """ Calls spin_left_by_encoders with negative speeds to achieve spin_right motion. """
-
+    spin_left_by_encoders(degrees,-speed, stop_action)
 
 test_spin_left_spin_right()
