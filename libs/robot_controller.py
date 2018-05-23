@@ -25,12 +25,18 @@ class Snatch3r(object):
         self.right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
         self.arm_motor = ev3.MediumMotor(ev3.OUTPUT_A)
         self.touch_sensor = ev3.TouchSensor()
+        self.color_sensor = ev3.ColorSensor(ev3.INPUT_4)
+        self.beacon_seeker = ev3.BeaconSeeker(channel=4)
+        self.pixy = ev3.Sensor(driver_name="pixy-lego")
         self.max_speed = 900
 
 
         assert self.left_motor.connected
         assert self.right_motor.connected
         assert self.arm_motor.connected
+        assert self.color_sensor
+        assert self.pixy
+
 
     def drive_inches(self,inches,speed,stop_action='coast'):
 
@@ -118,4 +124,44 @@ class Snatch3r(object):
         self.right_motor.stop()
         print('Goodbye!')
         ev3.Sound.speak("Goodbye").wait()
+
+    def seek_beacon(self):
+        forward_speed = 300
+        turn_speed = 100
+        while not self.touch_sensor.is_pressed:
+            current_heading = self.beacon_seeker.heading
+            current_distance = self.beacon_seeker.distance
+            if current_distance == -128:
+                print("IR Remote not found. Distance is -128")
+                self.stop()
+            else:
+                if math.fabs(current_heading) < 2:
+                    print("On the right heading. Distance: ", current_distance)
+                    if current_distance == 0:
+                        self.stop()
+                        return True
+                    if current_distance > 0:
+                        self.drive(forward_speed, forward_speed)
+                if math.fabs(current_heading) > 2 and math.fabs(current_heading) < 10:
+                    if current_heading < 0:
+                        self.drive(-turn_speed, turn_speed)
+                    if current_heading > 0:
+                        self.drive(turn_speed, -turn_speed)
+                if math.fabs(current_heading) > 10:
+                    self.drive(-forward_speed, forward_speed)
+            time.sleep(0.2)
+        print("Abandon ship!")
+        self.stop()
+        return False
+
+    def color_to_seek(self,color_button_entry):
+        robot = Snatch3r()
+        while True:
+            ev3.Sound.speak("Seeking " + color_button_entry).wait()
+            robot.drive(200, 200)
+            if robot.color_sensor.color == color_button_entry:
+                robot.stop()
+                ev3.Sound.speak("Found " + color_button_entry).wait()
+            time.sleep(.01)
+
 
