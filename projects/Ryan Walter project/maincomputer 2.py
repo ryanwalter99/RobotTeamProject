@@ -134,6 +134,9 @@ def window3link(mqtt_client):
     run_button.grid(row=1,column=2)
     run_button["command"] = (lambda: color_to_seek(mqtt_client))
 
+    
+
+
 
 
     # The values from the Pixy range from 0 to 319 for the x and 0 to 199 for the y.
