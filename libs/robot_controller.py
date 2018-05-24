@@ -30,12 +30,11 @@ class Snatch3r(object):
         self.pixy = ev3.Sensor(driver_name="pixy-lego")
         self.max_speed = 900
 
-
         assert self.left_motor.connected
         assert self.right_motor.connected
         assert self.arm_motor.connected
-        assert self.color_sensor
-        assert self.pixy
+        assert self.color_sensor.connected
+        #assert self.pixy
 
 
     def drive_inches(self,inches,speed,stop_action='coast'):

@@ -1,20 +1,33 @@
 import mqtt_remote_method_calls as com
 import robot_controller as robo
-import ev3dev.ev3 as ev3
 import time
+import ev3dev.ev3 as ev3
 
-class Drawer(object):
-    """ Helper class that might be useful to communicate between different callbacks."""
+# def main(self):
+#     class Delegate(object):
+#         def __init__(self):
+#             self.robot = robo.Snatch3r()
+#
+#     mqtt_client = com.MqttClient()
+#     mqtt_client.connect_to_pc()
+#     self.robot.loop_forever()
+def main():
+    robot = RescueBot()
+    mqtt_client = com.MqttClient(robot)
+    mqtt_client.connect_to_pc()
+    robot.loop_forever()
 
+
+class RescueBot(object):
 
     def __init__(self):
         self.running = True
         self.robot = robo.Snatch3r()
         self.btn = ev3.Button()
-        self.btn.on_up = lambda state: self.drive_to_color(state, ev3.ColorSensor.COLOR_RED)
-        self.btn.on_down = lambda state: self.drive_to_color(state,  ev3.ColorSensor.COLOR_BLUE)
-        self.btn.on_left = lambda state: self.drive_to_color(state,  ev3.ColorSensor.COLOR_BLACK)
-        self.btn.on_right = lambda state: self.drive_to_color(state,  ev3.ColorSensor.COLOR_WHITE)
+        # self.btn.on_up = lambda state: self.drive_to_color(state, ev3.ColorSensor.COLOR_RED)
+        # self.btn.on_down = lambda state: self.drive_to_color(state,  ev3.ColorSensor.COLOR_BLUE)
+        # self.btn.on_left = lambda state: self.drive_to_color(state,  ev3.ColorSensor.COLOR_BLACK)
+        # self.btn.on_right = lambda state: self.drive_to_color(state,  ev3.ColorSensor.COLOR_WHITE)
         self.left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
         self.right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
         self.arm_motor = ev3.MediumMotor(ev3.OUTPUT_A)
@@ -99,68 +112,6 @@ class Drawer(object):
         self.left_motor.wait_while(ev3.Motor.STATE_RUNNING)
         self.right_motor.wait_while(ev3.Motor.STATE_RUNNING)
 
-
-    def drive_to_color(self,button_state, color_to_seek):
-        COLOR_NAMES = ["None", "Black", "Blue", "Green", "Yellow", "Red", "White", "Brown"]
-        if button_state:
-            ev3.Sound.speak("Seeking " + COLOR_NAMES[color_to_seek]).wait()
-
-            self.robot.drive(200, 200)
-            while True:
-                if self.robot.color_sensor.color == color_to_seek:
-                    self.robot.stop()
-                    ev3.Sound.speak("Found " + COLOR_NAMES[color_to_seek]).wait()
-                    time.sleep(.01)
-                    break
-
-    def color_to_seek(self):
-
-        print("--------------------------------------------")
-        print(" Drive to the color")
-        print("  Up button goes to Red")
-        print("  Down button goes to Blue")
-        print("  Left button goes to Black")
-        print("  Right button goes to White")
-        print("--------------------------------------------")
-
-        print("Press Back to exit this program.")
-
-
-        # For our standard shutdown button.
-
-        # DONE: 2. Uncomment the lines below to setup event handlers for these buttons.
-
-
-        # while dc.running:
-        #     btn.process()
-        #     time.sleep(0.01)
-
-        print("Starting!")
-        ev3.Sound.speak("Seeking color").wait()
-
-
-def main():
-    dc = Drawer()
-
-    mqtt_client = com.MqttClient(dc)
-    mqtt_client.connect_to_pc()
-    # mqtt_client.connect_to_pc("35.194.247.175")  # Off campus IP address of a GCP broker
-
-
-    dc.listining()
-
-
-
-
-
-
-
-
-
-def handle_shutdown(button_state, dc):
-    """Exit the program."""
-    if button_state:
-        dc.running = False
-
-
 main()
+
+
