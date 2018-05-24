@@ -29,6 +29,8 @@ class Snatch3r(object):
         self.beacon_seeker = ev3.BeaconSeeker(channel=4)
         self.pixy = ev3.Sensor(driver_name="pixy-lego")
         self.max_speed = 900
+        self.btn = ev3.Button()
+        self.btn.on_up = lambda state: self.drive_to_color(state, ev3.ColorSensor.COLOR_RED)
 
         assert self.left_motor.connected
         assert self.right_motor.connected

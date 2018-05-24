@@ -34,11 +34,13 @@ import mqtt_remote_method_calls as com
 import time
 import ev3dev.ev3 as ev3
 import math
+import robot_controller as robo
+COLOR_NAMES = ["None", "Black", "Blue", "Green", "Yellow", "Red", "White", "Brown"]
+# robot = robo.Snatch3r()
 
 def main():
     # : 2. Setup an mqtt_client.  Notice that since you don't need to receive any messages you do NOT need to have
     # a MyDelegate class.  Simply construct the MqttClient with no parameter in the constructor (easy).
-
 
     mqtt_client = com.MqttClient()
     mqtt_client.connect_to_ev3()
@@ -106,13 +108,10 @@ def main():
 
     rescue_button = ttk.Button(main_frame, text="Rescue")
     rescue_button.grid(row=6, column=1)
-    rescue_button['command'] = (lambda: rescue())
+    rescue_button['command'] = (lambda: rescue(mqtt_client))
 
-    search_and_rescue_button = ttk.Button(main_frame, text="S. A. R")
-    search_and_rescue_button.grid(row=5, column=1)
-    search_and_rescue_button['command'] = (lambda: search_and_rescue())
     root.mainloop()
-
+    #search_and_rescue()
 
 # ----------------------------------------------------------------------
 # Tkinter callbacks
@@ -224,5 +223,12 @@ def rescue(self):
         self.stop()
         return False
 
+
+    # def Search(mqtt_client):
+    # mqtt_client.send_message("search1")
+    #
+    #
+    # def Rescue(mqtt_client):
+    # mqtt_client.send_message("currentcolor")
 main()
 
