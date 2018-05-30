@@ -10,7 +10,4 @@ def main():
     mqtt_client.connect_to_pc()
     robot.loop_forever()
 
-
-
-
 main()

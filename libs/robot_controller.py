@@ -163,6 +163,27 @@ class Snatch3r(object):
             if robot.color_sensor.color == color_button_entry:
                 robot.stop()
                 ev3.Sound.speak("Found " + color_button_entry).wait()
-            time.sleep(.01)
+            time.sleep(.1)
+
+    def forward(self, left_speed, right_speed):
+        self.left_motor.run_forever(speed_sp=left_speed)
+        self.right_motor.run_forever(speed_sp=right_speed)
+
+    def exit(self):
+        self.left_motor.stop()
+        self.right_motor.stop()
+        self.running = False
+
+    def look(self):
+        self.forward(300, 300)
+        while True:
+            current_color = self.color_sensor.color
+            if current_color == 1:
+                break
+            time.sleep(.1)
+        self.stop()
+
+    def speak(self):
+        ev3.Sound.speak('Rescue Bot activated').wait()
 
 
